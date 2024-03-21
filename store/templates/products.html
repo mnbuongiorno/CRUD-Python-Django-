@@ -1,0 +1,64 @@
+{% extends 'template.html '%} 
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-succes">{{ message }}</div> 
+        {% endfor %}
+    {% endif %}
+
+    <h2 class="text-center">Products</h2>
+
+    <form class="w-50 shadow mx-auto p-4 m-3" method="post" action="products/save_products">
+        {% csrf_token %}
+        Name: <input type="text" name="name" id="name" class="form-control my-2" required>
+
+        Price: <input type="number" name="price" id="price" class="form-control my-2" required>
+
+        Description:
+        <textarea class="form-control my-2" name="description">
+
+        </textarea>
+
+        <input type="submit" value="Save" class="btn btn-primary">
+    </form>
+
+        <table class="table table-light w-75 mx-auto text-center">
+            <tr class="table-dark">
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th colspan="2"></th>
+            </tr>
+         {% for product in products %} 
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.description }}</td>
+                <td>
+                    <form action="{% url 'delete' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this product?')" >
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                    </form>
+                    
+                </td>
+                <td>
+                    <form action="{% url 'details' product.id %}" method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-warning">
+                            <i class="fa fa-edit"></i>
+                        </button>
+
+                    </form>
+                </td>
+
+            </tr>
+                 
+        {% endfor %} 
+        </table>
+
+{% endblock %}
